@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>みんなのやりたい曲｜横浜ケルト音楽セッション</title>
+<style>
+  :root{
+    --green:#2f6b3f;
+    --green-dark:#1f4a2b;
+    --green-light:#e6f0df;
+    --wine:#7b1e3a;
+    --cream:#fbfaf4;
+    --ink:#26302a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+    line-height:1.8; font-size:16px;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:0 16px}
+
+  header{
+    background-color:#1f5a32;
+    background-image:
+      repeating-linear-gradient(90deg,
+        transparent 0 11px, rgba(6,14,56,.95) 11px 15px,
+        transparent 15px 29px, rgba(0,0,0,.6) 29px 30px,
+        transparent 30px 40px, rgba(0,0,0,.35) 40px 49px,
+        transparent 49px 60px),
+      repeating-linear-gradient(0deg,
+        transparent 0 11px, rgba(6,14,56,.95) 11px 15px,
+        transparent 15px 29px, rgba(0,0,0,.6) 29px 30px,
+        transparent 30px 40px, rgba(0,0,0,.35) 40px 49px,
+        transparent 49px 60px);
+    color:#fff; text-align:center; padding:36px 20px 40px;
+    text-shadow:0 1px 6px rgba(0,0,0,.55);
+    border-bottom:6px solid var(--wine);
+  }
+  header svg{width:60px; height:60px}
+  header h1{font-size:26px; margin:6px 0 8px; line-height:1.4}
+  header p{margin:0 auto; max-width:520px; font-size:15px}
+  .btns{margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    display:inline-block; padding:10px 22px; border-radius:999px;
+    text-decoration:none; font-weight:700; font-size:14px;
+    border:2px solid #fff; color:#fff; text-shadow:none;
+  }
+  .btn.main{background:var(--wine)}
+  .btn.sub{background:rgba(0,0,0,.25)}
+
+  .tools{margin:24px 0 8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .tools input{
+    flex:1; min-width:200px; padding:10px 14px; font-size:16px;
+    border:1px solid #c9d8c1; border-radius:10px; background:#fff;
+  }
+  .count{font-size:14px; color:#5b6b60}
+  .notice{
+    margin:16px 0; padding:12px 16px; border-radius:10px; font-size:14px;
+    background:#fff6e0; border:1px solid #ecd9a0;
+  }
+  .notice.err{background:#fde8ec; border-color:#e7a9b6}
+
+  .song{
+    background:#fff; border:1px solid #d6e3cf; border-radius:14px;
+    padding:18px 18px 14px; margin:16px 0;
+  }
+  .song h2{
+    margin:0 0 2px; font-size:19px; color:var(--green-dark);
+    padding-left:12px; border-left:5px solid var(--wine);
+  }
+  .meta{font-size:13px; color:#5b6b60; margin:4px 0 10px}
+  .score{overflow-x:auto}
+  .score svg{max-width:100%; height:auto}
+  .none{font-size:14px; color:#7a857e; margin:6px 0}
+  .song a.link{font-size:14px; color:var(--wine)}
+  details{margin-top:8px}
+  summary{cursor:pointer; font-size:13px; color:var(--green)}
+  pre{
+    background:var(--green-light); padding:10px 12px; border-radius:8px;
+    overflow-x:auto; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;
+  }
+  footer{margin:40px 0 0; padding:20px; text-align:center; background:var(--green-dark); color:#cfe0c9; font-size:13px}
+  footer a{color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <svg viewBox="0 0 100 100" role="img" aria-label="クローバー">
+    <g fill="#ffffff">
+      <path d="M50 52 C34 40 34 18 50 22 C66 18 66 40 50 52Z"/>
+      <path d="M50 52 C38 36 16 36 20 52 C16 66 38 66 50 52Z"/>
+      <path d="M50 52 C62 36 84 36 80 52 C84 66 62 66 50 52Z"/>
+    </g>
+    <path d="M50 52 C50 68 46 80 38 90" stroke="#ffffff" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </svg>
+  <h1>みんなのやりたい曲</h1>
+  <p>申し込みフォームで集まった曲です。ABC譜が入力されている曲は、楽譜で見られます。</p>
+  <div class="btns">
+    <a class="btn main" href="https://forms.gle/ZBmSfLe5iTx1zUXa9">曲を追加する（フォーム）</a>
+    <a class="btn sub" href="./">セッションの案内に戻る</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tools">
+    <input id="q" type="search" placeholder="曲名・名前・楽器で絞り込み" aria-label="絞り込み">
+    <span class="count" id="count"></span>
+  </div>
+  <div id="msg"></div>
+  <div id="list"></div>
+</main>
+
+<footer>
+  <p>横浜ケルト音楽セッション ／ <a href="./">案内ページへ</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/abcjs@6.4.4/dist/abcjs-basic-min.js"></script>
+<script>
+// ▼ 公開用タブの「ウェブに公開」CSVのURLをここに貼ってください ▼
+const CSV_URL = "【公開用タブのCSV URL】";
+
+// 公開用タブの列：0=お名前 1=楽器 2=曲名 3=ABC譜 4=曲に関するURL
+const SAMPLE_CSV = [
+  'お名前,楽器,曲名,ABC譜,URL',
+  'サンプル,ティンホイッスル,サンプルのジグ,"X:1\nT:サンプルのジグ\nM:6/8\nL:1/8\nR:jig\nK:D\n|:DFA d2A|BAF A2F|DFA d2e|fed e3:|\n|:fed cBA|d2e f3|fed cBA|d3 d3:|",',
+  'サンプル,フィドル,ABC譜なしの曲,,'
+].join('\n');
+
+// <parser>
+function parseCSV(text){
+  text = text.replace(/^\uFEFF/, '');
+  const rows = []; let row = [], cell = '', inQ = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (inQ){
+      if (c === '"'){
+        if (text[i+1] === '"'){ cell += '"'; i++; } else inQ = false;
+      } else cell += c;
+    } else if (c === '"'){ inQ = true; }
+    else if (c === ','){ row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r'){
+      if (c === '\r' && text[i+1] === '\n') i++;
+      row.push(cell); cell = ''; rows.push(row); row = [];
+    } else cell += c;
+  }
+  if (cell !== '' || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ''));
+}
+// ABCを整える。戻り値 {abc, ok}。ok=falseは楽譜にできない（調K:が無い）
+function normalizeAbc(raw, title){
+  let abc = (raw || '').replace(/\r\n?/g, '\n').replace(/\u00A0/g, ' ').trim();
+  if (!abc) return null;
+  if (!/^K:/m.test(abc)) return { abc, ok:false };
+  if (!/^T:/m.test(abc)) abc = 'T:' + (title || '無題') + '\n' + abc;
+  if (!/^X:/m.test(abc)) abc = 'X:1\n' + abc;
+  return { abc, ok:true };
+}
+function safeUrl(u){
+  try{
+    const x = new URL((u || '').trim());
+    return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : '';
+  }catch(e){ return ''; }
+}
+// </parser>
+
+const $list = document.getElementById('list');
+const $msg = document.getElementById('msg');
+const $count = document.getElementById('count');
+const $q = document.getElementById('q');
+let songs = [];
+
+function notice(text, cls){
+  const d = document.createElement('div');
+  d.className = 'notice' + (cls ? ' ' + cls : '');
+  d.textContent = text;
+  $msg.appendChild(d);
+}
+
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function render(){
+  const kw = $q.value.trim().toLowerCase();
+  $list.innerHTML = '';
+  let shown = 0;
+  songs.forEach((s, idx) => {
+    const hay = (s.title + ' ' + s.name + ' ' + s.inst).toLowerCase();
+    if (kw && !hay.includes(kw)) return;
+    shown++;
+    const card = el('section', 'song');
+    card.appendChild(el('h2', '', s.title || '（曲名なし）'));
+    const meta = [s.name && ('リクエスト：' + s.name), s.inst && ('楽器：' + s.inst)].filter(Boolean).join('　／　');
+    if (meta) card.appendChild(el('div', 'meta', meta));
+
+    const norm = normalizeAbc(s.abc, s.title);
+    if (!norm){
+      card.appendChild(el('p', 'none', 'ABC譜は入力されていません。'));
+    } else if (!norm.ok){
+      card.appendChild(el('p', 'none', 'ABC譜に調（K:）の行がないため、楽譜にできませんでした。'));
+      const d = el('details'); d.open = true;
+      d.appendChild(el('summary', '', 'ABC譜（テキスト）'));
+      d.appendChild(el('pre', '', s.abc));
+      card.appendChild(d);
+    } else {
+      const box = el('div', 'score'); box.id = 'score-' + idx;
+      card.appendChild(box);
+      let ok = false;
+      try{
+        const tunes = ABCJS.renderAbc(box, norm.abc, { responsive:'resize', add_classes:true });
+        ok = !!(tunes && tunes[0] && tunes[0].lines && tunes[0].lines.length);
+      }catch(e){ ok = false; }
+      if (!ok){
+        box.replaceWith(el('p', 'none', '楽譜として表示できませんでした。ABC譜の書式を確認してください。'));
+      }
+      const d = el('details');
+      d.appendChild(el('summary', '', 'ABC譜（テキスト）を表示'));
+      d.appendChild(el('pre', '', norm.abc));
+      card.appendChild(d);
+    }
+    const u = safeUrl(s.url);
+    if (u){
+      const a = el('a', 'link', '参考リンク');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      card.appendChild(a);
+    }
+    $list.appendChild(card);
+  });
+  $count.textContent = songs.length ? (kw ? shown + ' / ' : '') + songs.length + ' 曲' : '';
+  if (songs.length && !shown) $list.appendChild(el('p', 'none', '該当する曲はありません。'));
+}
+
+function load(csv){
+  const rows = parseCSV(csv).slice(1); // 1行目は見出し
+  songs = rows.map(r => ({
+    name:(r[0]||'').trim(), inst:(r[1]||'').trim(), title:(r[2]||'').trim(),
+    abc:(r[3]||''), url:(r[4]||'')
+  })).filter(s => s.title || s.abc.trim());
+  songs.reverse(); // 新しい投稿を上に
+  if (!songs.length) notice('まだ曲が集まっていません。フォームから最初の1曲を送ってみてください。');
+  render();
+}
+
+$q.addEventListener('input', render);
+
+(async function(){
+  if (CSV_URL.indexOf('【') === 0){
+    notice('サンプル表示中です。CSVのURLを設定すると、フォームの回答が表示されます。');
+    load(SAMPLE_CSV);
+    return;
+  }
+  try{
+    const sep = CSV_URL.includes('?') ? '&' : '?';
+    const res = await fetch(CSV_URL + sep + 't=' + Date.now());
+    if (!res.ok) throw new Error(res.status);
+    load(await res.text());
+  }catch(e){
+    notice('曲の一覧を読み込めませんでした。しばらくしてからもう一度お試しください。', 'err');
+  }
+})();
+</script>
+</body>
+</html>
